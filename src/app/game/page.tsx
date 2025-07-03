@@ -266,7 +266,7 @@ export default function Game() {
         Question {questionCount + 1} of {MAX_QUESTIONS_PER_GAME}
       </Typography>
       <Typography variant="subtitle1" className="text-blue-600 font-semibold mb-4 text-xl md:text-2xl flex items-center justify-center">
-        {currentQuestion.topic && React.createElement(topicIcons[currentQuestion.topic], { className: "mr-2" })}
+        {currentQuestion.topic && (topicIcons[currentQuestion.topic] ? React.createElement(topicIcons[currentQuestion.topic], { className: "mr-2" }) : <DataObjectIcon className="mr-2" />)}
         Topic: {currentQuestion.topic}
       </Typography>
       <Typography variant="h5" component="h2" className="mb-6 font-bold text-black text-2xl md:text-3xl leading-relaxed">
