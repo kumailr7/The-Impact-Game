@@ -113,7 +113,7 @@ export default function Game() {
   const [error, setError] = useState<string | null>(null)
   const [questionCount, setQuestionCount] = useState(0)
 
-  const MAX_QUESTIONS_PER_GAME = 5 // You can adjust this number
+  const MAX_QUESTIONS_PER_GAME = 15 // You can adjust this number
 
   const resetGame = () => {
     setCurrentQuestion(null)

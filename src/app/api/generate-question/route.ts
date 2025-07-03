@@ -18,9 +18,9 @@ export async function GET(request: Request) {
   }
 
   const genAI = new GoogleGenerativeAI(apiKey)
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
 
-  let prompt = `Generate a multiple-choice question about a software engineering impact scenario. `
+  let prompt = `You are an expert in software engineering and DevOps. Generate a multiple-choice question about a realistic software engineering impact scenario. `
   prompt += `The question should be related to the category: ${category}. `
 
   if (topics) {
@@ -30,9 +30,10 @@ export async function GET(request: Request) {
   }
 
   prompt += `The difficulty level should be ${difficulty}. `
-  prompt += `The question should describe a software engineering scenario and ask the user to guess its impact. `
-  prompt += `It should have 4 options: 'Low', 'Medium', 'High', 'Critical', and specify the correct answer. `
-  prompt += `The output should be a JSON object with the following structure: { "id": number, "category": string, "topic": string, "question": string, "options": ["Low", "Medium", "High", "Critical"], "correctAnswer": string }. Ensure the JSON is valid and complete.`
+  prompt += `The question must describe a detailed, real-world software engineering scenario and ask the user to guess its potential impact. `
+  prompt += `Provide four impact levels as options: 'Low', 'Medium', 'High', and 'Critical'. `
+  prompt += `The output must be a valid, complete JSON object with the following structure: { "id": number, "category": string, "topic": string, "question": string, "options": ["Low", "Medium", "High", "Critical"], "correctAnswer": string }. `
+  prompt += `Ensure the scenario is plausible and the correct answer is well-justified (though the justification is not part of the output).`
 
   try {
     const result = await model.generateContent(prompt)
