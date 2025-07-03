@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add your global styles here */
+
+html,
+body {
+  font-family: 'Roboto', 'Open Sans', sans-serif;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Custom utility for text shadow for better contrast */
+.text-shadow-md {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-shadow-lg {
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
