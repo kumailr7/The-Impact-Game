@@ -30,7 +30,7 @@ export async function GET(request: Request) {
   }
 
   prompt += `The difficulty level should be ${difficulty}. `
-  prompt += `The question must describe a detailed, real-world software engineering scenario and ask the user to guess its potential impact. `
+  prompt += `The question should be a short, impactful, and concise description of a real-world software engineering scenario, asking the user to guess its potential impact. `
   prompt += `Provide four impact levels as options: 'Low', 'Medium', 'High', and 'Critical'. `
   prompt += `The output must be a valid, complete JSON object with the following structure: { "id": number, "category": string, "topic": string, "question": string, "options": ["Low", "Medium", "High", "Critical"], "correctAnswer": string }. `
   prompt += `Ensure the scenario is plausible and the correct answer is well-justified (though the justification is not part of the output).`
