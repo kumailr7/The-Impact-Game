@@ -26,6 +26,7 @@ interface Question {
 
 const ROLES = [
     'Platform Engineer',
+    'Solutions Architect',
     'DevOps',
     'DevSecOps',
     'Developer Advocate',
@@ -172,20 +173,20 @@ export default function Game() {
 
   if (!gameStarted) {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
-            <Typography variant="h4" component="h1" gutterBottom>
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center" style={{ background: 'linear-gradient(to right, #a6c1ee, #fbc2eb)' }}>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'black' }}>
                 Setup Your Game
             </Typography>
-            <FormControl fullWidth sx={{ my: 2 }}>
+            <FormControl fullWidth sx={{ my: 2, '& .MuiInputLabel-root': { color: 'black' }, '& .MuiOutlinedInput-notchedOutline': { borderColor: 'black' }, '& .MuiSelect-select': { color: 'black' }, '& .MuiSvgIcon-root': { color: 'black' } }}>
                 <InputLabel>Role</InputLabel>
-                <Select value={selectedRole} label="Role" onChange={(e) => setSelectedRole(e.target.value)}>
-                    {ROLES.map(role => <MenuItem key={role} value={role}>{role}</MenuItem>)}
+                <Select value={selectedRole} label="Role" onChange={(e) => setSelectedRole(e.target.value)} MenuProps={{ PaperProps: { sx: { bgcolor: 'white', color: 'black' } } }}>
+                    {ROLES.map(role => <MenuItem key={role} value={role} sx={{ '&:hover': { bgcolor: 'grey.200' } }}>{role}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl fullWidth sx={{ my: 2 }}>
+            <FormControl fullWidth sx={{ my: 2, '& .MuiInputLabel-root': { color: 'black' }, '& .MuiOutlinedInput-notchedOutline': { borderColor: 'black' }, '& .MuiSelect-select': { color: 'black' }, '& .MuiSvgIcon-root': { color: 'black' } } }>
                 <InputLabel>Difficulty</InputLabel>
-                <Select value={selectedDifficulty} label="Difficulty" onChange={(e) => setSelectedDifficulty(e.target.value)}>
-                    {DIFFICULTIES.map(difficulty => <MenuItem key={difficulty} value={difficulty}>{difficulty}</MenuItem>)}
+                <Select value={selectedDifficulty} label="Difficulty" onChange={(e) => setSelectedDifficulty(e.target.value)} MenuProps={{ PaperProps: { sx: { bgcolor: 'white', color: 'black' } } }}>
+                    {DIFFICULTIES.map(difficulty => <MenuItem key={difficulty} value={difficulty} sx={{ '&:hover': { bgcolor: 'grey.200' } }}>{difficulty}</MenuItem>)}
                 </Select>
             </FormControl>
             <Button variant="contained" color="primary" onClick={startGame} disabled={!selectedRole || !selectedDifficulty}>

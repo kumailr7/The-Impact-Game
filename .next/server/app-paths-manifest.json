@@ -1,10 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/api/generate-question/route": "app/api/generate-question/route.js",
-  "/api/save-score/route": "app/api/save-score/route.js",
-  "/api/scoreboard/route": "app/api/scoreboard/route.js",
-  "/game/page": "app/game/page.js",
-  "/scoreboard/page": "app/scoreboard/page.js",
   "/page": "app/page.js"
 }
