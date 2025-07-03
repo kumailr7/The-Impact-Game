@@ -1,16 +1,18 @@
-
 'use client'
 
 import { useState, useEffect } from 'react'
 import { Container, Typography, List, ListItem, ListItemText, Paper, Box } from '@mui/material'
+import { useSession } from 'next-auth/react'
 
 export default function Scoreboard() {
+  const { data: session } = useSession();
   const [scoreboard, setScoreboard] = useState([])
 
   useEffect(() => {
     const fetchScoreboard = async () => {
       try {
-        const response = await fetch('/api/scoreboard')
+        const userId = session?.user?.id;
+        const response = await fetch(`/api/scoreboard${userId ? `?userId=${userId}` : ''}`)
         if (response.ok) {
           const data = await response.json()
           setScoreboard(data)
@@ -22,7 +24,7 @@ export default function Scoreboard() {
       }
     }
     fetchScoreboard()
-  }, [])
+  }, [session])
 
   return (
     <Container
@@ -65,7 +67,7 @@ export default function Scoreboard() {
                   }
                   secondary={
                     <Typography variant="body2" color="text.secondary">
-                      Date: {new Date(entry.date).toLocaleDateString()}
+                      Date: {new Date(entry.date).toLocaleDateString()} - Role: {entry.role} - Difficulty: {entry.difficulty}
                     </Typography>
                   }
                 />

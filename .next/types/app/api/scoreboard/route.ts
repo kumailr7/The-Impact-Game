@@ -1,4 +1,4 @@
-// File: /home/kumail/Devops-Journey/Projects/guess-the-impact/src/app/api/scoreboard/route.ts
+// File: /home/kumail/Devops-Journey/Projects/guess-the-impact/The-Impact-Game/src/app/api/scoreboard/route.ts
 import * as entry from '../../../../../src/app/api/scoreboard/route.js'
 import type { NextRequest } from 'next/server.js'
 

@@ -1,4 +1,4 @@
-// File: /home/kumail/Devops-Journey/Projects/guess-the-impact/src/app/api/auth/[...nextauth]/route.ts
+// File: /home/kumail/Devops-Journey/Projects/guess-the-impact/The-Impact-Game/src/app/api/auth/[...nextauth]/route.ts
 import * as entry from '../../../../../../src/app/api/auth/[...nextauth]/route.js'
 import type { NextRequest } from 'next/server.js'
 

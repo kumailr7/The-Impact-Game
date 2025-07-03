@@ -3,10 +3,8 @@ import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const category = searchParams.get('category') || 'General'
-  const topic = searchParams.get('topic') || 'General'
-  const difficulty = searchParams.get('difficulty') || 'medium' // New: default to medium
-  const topics = searchParams.get('topics') // New: comma-separated topics
+  const role = searchParams.get('role') || 'DevOps'
+  const difficulty = searchParams.get('difficulty') || 'medium'
 
   // Ensure the API key is available
   const apiKey = process.env.GEMINI_API_KEY
@@ -21,14 +19,7 @@ export async function GET(request: Request) {
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
 
   let prompt = `You are an expert in software engineering and DevOps. Generate a multiple-choice question about a realistic software engineering impact scenario. `
-  prompt += `The question should be related to the category: ${category}. `
-
-  if (topics) {
-    prompt += `Focus on one of these topics: ${topics}. `
-  } else {
-    prompt += `Focus on the topic: ${topic}. `
-  }
-
+  prompt += `The question should be tailored for a ${role} role. `
   prompt += `The difficulty level should be ${difficulty}. `
   prompt += `The question should be a short, impactful, and concise description of a real-world software engineering scenario, asking the user to guess its potential impact. `
   prompt += `Provide four impact levels as options: 'Low', 'Medium', 'High', and 'Critical'. `

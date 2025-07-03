@@ -6,7 +6,7 @@ const scoreboardFilePath = path.join(process.cwd(), 'src/data/scoreboard.json');
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, score } = await req.json();
+    const { name, score, userId, role, difficulty } = await req.json();
 
     if (!name || typeof score === 'undefined') {
       return NextResponse.json({ message: 'Name and score are required' }, { status: 400 });
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       scoreboard = JSON.parse(data);
     }
 
-    scoreboard.push({ name, score, date: new Date().toISOString() });
+    scoreboard.push({ name, score, date: new Date().toISOString(), userId, role, difficulty });
     scoreboard.sort((a: any, b: any) => b.score - a.score);
     // Keep only top 10 scores
     scoreboard = scoreboard.slice(0, 10);

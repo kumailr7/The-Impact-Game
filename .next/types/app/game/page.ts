@@ -1,4 +1,4 @@
-// File: /home/kumail/Devops-Journey/Projects/guess-the-impact/src/app/game/page.tsx
+// File: /home/kumail/Devops-Journey/Projects/guess-the-impact/The-Impact-Game/src/app/game/page.tsx
 import * as entry from '../../../../src/app/game/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

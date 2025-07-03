@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import React from 'react'
-import { Button, Typography, RadioGroup, FormControlLabel, Radio, Box } from '@mui/material'
+import { Button, Typography, RadioGroup, FormControlLabel, Radio, Box, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import SecurityIcon from '@mui/icons-material/Security'
 import CloudIcon from '@mui/icons-material/Cloud'
@@ -24,42 +24,19 @@ interface Question {
   correctAnswer: string
 }
 
-const TOPICS = [
-  'Kubernetes',
-  'Infrastructure',
-  'AWS',
-  'GCP',
-  'Azure',
-  'Production Deployment',
-  'Solutions Architecture',
-  'Database',
-  'Cache',
-  'Application API',
-  'Security',
-  'Linux',
-  'System Design Impacts',
-  'Networking',
-  'Deployment Strategy',
-  'Large Scale System Failures',
-  'Cybersecurity',
-  'Proxy',
-  'Storage',
-  'DNS',
-  'Git',
-  'CI-CD',
-  'Terraform',
-  'Ansible',
-  'Zero Trust Network Policy',
-  'VPN',
-  'Firewall',
-  'On-prem',
-  'Hybrid Infrastructure',
-  'SRE',
-  'Platform Engineering',
-  'DevOps',
-  'DevSecOps',
-  'MLOps',
-]
+const ROLES = [
+    'Platform Engineer',
+    'DevOps',
+    'DevSecOps',
+    'Developer Advocate',
+    'SRE',
+    'MLOps',
+    'System Admins',
+    'Incident Responder/Commander',
+    'Cybersecurity Analyst'
+];
+
+const DIFFICULTIES = ['Easy', 'Medium', 'Hard'];
 
 const topicIcons: { [key: string]: SvgIconComponent } = {
   'Kubernetes': PublicIcon,
@@ -98,72 +75,57 @@ const topicIcons: { [key: string]: SvgIconComponent } = {
   'MLOps': ComputerIcon,
 }
 
-const getRandomTopic = () => {
-  return TOPICS[Math.floor(Math.random() * TOPICS.length)]
-}
-
-
 export default function Game() {
   const { data: session } = useSession()
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
   const [selectedOption, setSelectedOption] = useState('')
   const [score, setScore] = useState(0)
   const [gameOver, setGameOver] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [questionCount, setQuestionCount] = useState(0)
+  const [gameStarted, setGameStarted] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('');
 
   const MAX_QUESTIONS_PER_GAME = 15 // You can adjust this number
+
+  const fetchQuestion = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await fetch(`/api/generate-question?role=${selectedRole}&difficulty=${selectedDifficulty}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data: Question = await response.json()
+      setCurrentQuestion(data)
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const startGame = () => {
+    if (selectedRole && selectedDifficulty) {
+        setGameStarted(true);
+        fetchQuestion();
+    }
+  }
 
   const resetGame = () => {
     setCurrentQuestion(null)
     setSelectedOption('')
     setScore(0)
     setGameOver(false)
-    setLoading(true)
+    setLoading(false)
     setError(null)
     setQuestionCount(0)
-    // Fetch a new question to start the game over
-    const fetchQuestion = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        const topic = getRandomTopic()
-        const response = await fetch(`/api/generate-question?topics=${topic}`)
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data: Question = await response.json()
-        setCurrentQuestion(data)
-      } catch (e: any) {
-        setError(e.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchQuestion()
+    setGameStarted(false);
+    setSelectedRole('');
+    setSelectedDifficulty('');
   }
-
-  useEffect(() => {
-    const fetchQuestion = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        const topic = getRandomTopic()
-        const response = await fetch(`/api/generate-question?topics=${topic}`)
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data: Question = await response.json()
-        setCurrentQuestion(data)
-      } catch (e: any) {
-        setError(e.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchQuestion()
-  }, [])
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(event.target.value)
@@ -187,7 +149,13 @@ export default function Game() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: session?.user?.name || 'Player', score: score + (selectedOption === currentQuestion.correctAnswer ? 1 : 0) }), // Pass the updated score
+          body: JSON.stringify({
+            name: session?.user?.name || 'Player',
+            score: score + (selectedOption === currentQuestion.correctAnswer ? 1 : 0),
+            userId: session?.user?.id,
+            role: selectedRole,
+            difficulty: selectedDifficulty,
+          }), // Pass the updated score
         })
         console.log('Sending score with name:', session?.user?.name || 'Player')
         if (!response.ok) {
@@ -198,22 +166,33 @@ export default function Game() {
       }
     } else {
       // Fetch a new question
-      setLoading(true)
-      setError(null)
-      try {
-        const topic = getRandomTopic()
-        const response = await fetch(`/api/generate-question?topics=${topic}`)
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data: Question = await response.json()
-        setCurrentQuestion(data)
-      } catch (e: any) {
-        setError(e.message)
-      } finally {
-        setLoading(false)
-      }
+      fetchQuestion();
     }
+  }
+
+  if (!gameStarted) {
+    return (
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
+            <Typography variant="h4" component="h1" gutterBottom>
+                Setup Your Game
+            </Typography>
+            <FormControl fullWidth sx={{ my: 2 }}>
+                <InputLabel>Role</InputLabel>
+                <Select value={selectedRole} label="Role" onChange={(e) => setSelectedRole(e.target.value)}>
+                    {ROLES.map(role => <MenuItem key={role} value={role}>{role}</MenuItem>)}
+                </Select>
+            </FormControl>
+            <FormControl fullWidth sx={{ my: 2 }}>
+                <InputLabel>Difficulty</InputLabel>
+                <Select value={selectedDifficulty} label="Difficulty" onChange={(e) => setSelectedDifficulty(e.target.value)}>
+                    {DIFFICULTIES.map(difficulty => <MenuItem key={difficulty} value={difficulty}>{difficulty}</MenuItem>)}
+                </Select>
+            </FormControl>
+            <Button variant="contained" color="primary" onClick={startGame} disabled={!selectedRole || !selectedDifficulty}>
+                Start Game
+            </Button>
+        </div>
+    )
   }
 
   if (loading) {

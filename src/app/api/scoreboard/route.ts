@@ -4,11 +4,18 @@ import path from 'path';
 
 const scoreboardFilePath = path.join(process.cwd(), 'src/data/scoreboard.json');
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get('userId');
+
     if (fs.existsSync(scoreboardFilePath)) {
       const data = fs.readFileSync(scoreboardFilePath, 'utf-8');
-      const scoreboard = JSON.parse(data);
+      let scoreboard = JSON.parse(data);
+
+      if (userId) {
+        scoreboard = scoreboard.filter((entry: any) => entry.userId === userId);
+      }
       return NextResponse.json(scoreboard);
     } else {
       return NextResponse.json([]);
