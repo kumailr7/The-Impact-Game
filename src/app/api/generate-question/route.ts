@@ -18,8 +18,21 @@ export async function GET(request: Request) {
   const genAI = new GoogleGenerativeAI(apiKey)
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
 
-  let prompt = `You are an expert in software engineering and DevOps. Generate a multiple-choice question about a realistic software engineering impact scenario. `
-  prompt += `The question should be tailored for a ${role} role. `
+  const roleTopics: { [key: string]: string } = {
+    'Platform Engineering': 'Terraform, Kubernetes, Cloud Infrastructure, and automation tools',
+    'DevOps': 'CI/CD pipelines, infrastructure as code, containerization, and cloud services',
+    'DevSecOps': 'security integration in DevOps, vulnerability scanning, security automation, and threat detection',
+    'Solutions Architect': 'decision-making under pressure, architecture design, cost optimization, and system integration',
+    'SRE': 'on-call responsibilities, incident response, monitoring, and high availability',
+    'Incident Responder': 'handling security incidents, troubleshooting, root cause analysis, and emergency response protocols',
+    'MLOps': 'machine learning pipelines, model deployment, data pipelines, and scalability challenges',
+    'Cybersecurity Analyst': 'hacking, malware analysis, network security, penetration testing, and threat intelligence',
+  }
+
+  const topics = roleTopics[role] || 'software engineering and DevOps'
+
+  let prompt = `You are an expert in ${topics}. Generate a multiple-choice question about a realistic software engineering impact scenario. `
+  prompt += `The question should be tailored for a ${role} role, focusing on topics like ${topics}. `
   prompt += `The difficulty level should be ${difficulty}. `
   prompt += `The question should be a short, impactful, and concise description of a real-world software engineering scenario, asking the user to guess its potential impact. `
   prompt += `Provide four impact levels as options: 'Low', 'Medium', 'High', and 'Critical'. `
