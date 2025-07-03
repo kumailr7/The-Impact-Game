@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import SessionProvider from "@/components/SessionProvider";
 import { getServerSession } from "next-auth";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Guess the impact",
@@ -19,6 +20,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <SessionProvider session={session}>{children}</SessionProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
