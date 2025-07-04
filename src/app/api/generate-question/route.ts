@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   const genAI = new GoogleGenerativeAI(apiKey)
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
 
-  const roleTopics: { [key: string]: string } = {
+  const roleTopics: { [key: string]: string | string[] } = {
     'Platform Engineering': 'Terraform, Kubernetes, Cloud Infrastructure, and automation tools',
     'DevOps': 'CI/CD pipelines, infrastructure as code, containerization, and cloud services',
     'DevSecOps': 'security integration in DevOps, vulnerability scanning, security automation, and threat detection',
@@ -27,10 +27,25 @@ export async function GET(request: Request) {
     'Incident Responder': 'handling security incidents, troubleshooting, root cause analysis, and emergency response protocols',
     'MLOps': 'machine learning pipelines, model deployment, data pipelines, and scalability challenges',
     'Cybersecurity Analyst': 'hacking, malware analysis, network security, penetration testing, and threat intelligence',
-    'Kubernetes Engineer': 'advanced cluster management including CKA/CKAD/CKS topics, API Gateway/Ingress, Backup/DR, Policy as Code (OPA/Kyverno), security best practices (RBAC, PodSecurity), multi-cluster operations, and production troubleshooting scenarios.',
+    'Kubernetes Engineer': [
+      'CKA, CKAD, and CKS level knowledge',
+      'Kubernetes API Gateway and Ingress management',
+      'Backup and Disaster Recovery strategies in Kubernetes',
+      'Policy as Code (OPA/Gatekeeper/Kyverno)',
+      'Kubernetes security best practices (RBAC, PodSecurity, Secrets management)',
+      'Multi-cluster and large-scale production-grade cluster operations',
+      'Troubleshooting complex issues in live environments',
+    ],
   }
 
-  const topics = roleTopics[role] || 'software engineering and DevOps'
+  const topicsForRole = roleTopics[role]
+  let topics: string
+
+  if (Array.isArray(topicsForRole)) {
+    topics = topicsForRole[Math.floor(Math.random() * topicsForRole.length)]
+  } else {
+    topics = topicsForRole || 'software engineering and DevOps'
+  }
 
   let prompt = `You are an expert in ${topics}. Generate a multiple-choice question about a realistic software engineering impact scenario. `
   prompt += `The question should be tailored for a ${role} role, focusing on topics like ${topics}. `
