@@ -34,7 +34,8 @@ const ROLES = [
     'MLOps',
     'System Admins',
     'Incident Responder/Commander',
-    'Cybersecurity Analyst'
+    'Cybersecurity Analyst',
+    'Kubernetes Engineer'
 ];
 
 const DIFFICULTIES = ['Easy', 'Medium', 'Hard'];

@@ -27,6 +27,7 @@ export async function GET(request: Request) {
     'Incident Responder': 'handling security incidents, troubleshooting, root cause analysis, and emergency response protocols',
     'MLOps': 'machine learning pipelines, model deployment, data pipelines, and scalability challenges',
     'Cybersecurity Analyst': 'hacking, malware analysis, network security, penetration testing, and threat intelligence',
+    'Kubernetes Engineer': 'container orchestration, cluster management, service mesh, and cloud-native networking',
   }
 
   const topics = roleTopics[role] || 'software engineering and DevOps'
