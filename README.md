@@ -33,6 +33,14 @@ npm run dev
 
 4. Open your browser to `http://localhost:3000` to play the game.
 
+5. Create a .env file and add these values
+```
+NEXTAUTH_SECRET
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+NEXTAUTH_URL
+GEMINI_API_KEY
+```
 ## How to Play
 
 1. Sign in with your Google account.
